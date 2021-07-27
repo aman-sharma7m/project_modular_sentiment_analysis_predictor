@@ -19,20 +19,20 @@ def trainModel():
             data=request.json['data']
         if request.json['userId'] is not None:
             user=str(request.json['userId'])
-            ic(request.json['userId'])
+            #ic(request.json['userId'])
         if request.json['projectId'] is not None:
             project = str(request.json['projectId'])
-            ic(request.json['projectId'])
+            #ic(request.json['projectId'])
 
         ##userid and projectid dir create
         create_user_project_dir(user,project)
 
         path=trainingDataFolderpath+user+'/'+project
-        ic(path)
+        #ic(path)
 
         #data conversion
         train_data_dict=extractFromUserData(data)
-        ic(train_data_dict)
+        #ic(train_data_dict)
 
         #saving as json-data-file in path
         with open(path+'/training_data.json','w',encoding='utf-8') as f:
@@ -60,8 +60,4 @@ def trainModel():
 
 if __name__ == "__main__":
     #clntApp = clientApp()
-    host = '0.0.0.0'
-    port = 5001
-    httpd = simple_server.make_server(host, port, app)
-    print("Serving on %s %d" % (host, port))
-    httpd.serve_forever()
+    app.run(port=8080,debug=True)

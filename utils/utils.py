@@ -15,7 +15,7 @@ def create_user_project_dir(user,project):
     path=os.path.join('training_data/' + user)
     #ic(path)
     if not os.path.isdir(path):
-        ic()
+        #ic()
         os.mkdir(path)
     path = os.path.join(path,project)
     #ic(path)
@@ -60,13 +60,13 @@ def processing_data_train(json_path):
     clean_df = data_preprocessing_train(data_dict)
     # converting preprocesed data from list to string to use in tfIdf
     clean_df['text'] = [" ".join(value) for value in clean_df['text'].values]
-
     return clean_df
 
 
 def trainingModel(json_path,model_path):
     data_df=processing_data_train(json_path)
 
+    data_df.to_csv(model_path+'/data_frame.csv')
     tf=TfidfVectorizer(max_df=0.95,stop_words='english')
 
     tf.fit(data_df['text'])
