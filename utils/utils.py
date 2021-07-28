@@ -89,5 +89,37 @@ def trainingModel(json_path,model_path):
 
     return 'success_trainingModel'
 
+def predictprocess(text):
+    nlp=spacy.load('en_core_web_sm')
+    pattern = "@\S+|https?:\S+|http?:\S|[^A-Za-z0-9]+"
+    clean_text=[]
+    for line in text:
+        clean_data=[]
+        doc =nlp(line)
+        for token in doc:
+            clean=re.sub(pattern, '', str(token.lemma_).lower())
+            if clean not in string.punctuation:
+                if clean not in nlp.Defaults.stop_words:
+                    clean_data.append(clean)
+        clean_text.append(clean_data)
+    clean_text = [' '.join(entry) for entry in clean_text]
+    return clean_text
+
+
+def executeProcessing(text,jsonfilepath,modelpath,vectorizerpath):
+    df=pd.DataFrame(text,columns=['text'])
+    df['text']=predictprocess(df['text'])
+    with open(modelpath,'rb') as f:
+        model=pickle.load(f)
+    with open(vectorizerpath,'rb') as f:
+        vector=pickle.load(f)
+
+    vector_data=vector.transform(df['text'])
+    prediction=model.predict(vector_data)
+    pridict_prob=model.predict_proba(vector_data)
+
+    ic(prediction,pridict_prob.flatten())
+
+    return prediction
 
 
