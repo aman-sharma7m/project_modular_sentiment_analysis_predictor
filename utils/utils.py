@@ -118,7 +118,7 @@ def executeProcessing(text,jsonfilepath,modelpath,vectorizerpath):
     prediction=model.predict(vector_data)
     pridict_prob=model.predict_proba(vector_data)
 
-    ic(prediction,pridict_prob.flatten())
+    ic(prediction,pridict_prob)
 
     return prediction
 
